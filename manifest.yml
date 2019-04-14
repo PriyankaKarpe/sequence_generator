@@ -1,0 +1,5 @@
+---
+applications:
+ - name: fun_watson_challenge
+   random-route: false
+   memory: 64M

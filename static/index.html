@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fun Watson Exercise</title>
+
+    <!-- Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="js/lib/jquery.i18n/jquery.i18n.js"></script>
+    <script src="js/lib/jquery.i18n/jquery.i18n.messagestore.js"></script>
+    <script src="js/lib/jquery.i18n/jquery.i18n.fallbacks.js"></script>
+    <script src="js/lib/jquery.i18n/jquery.i18n.language.js"></script>
+    <script src="js/lib/jquery.i18n/jquery.i18n.parser.js"></script>
+    <script src="js/lib/jquery.i18n/jquery.i18n.emitter.js"></script>
+    <script src="js/lib/jquery.i18n/jquery.i18n.emitter.bidi.js"></script>
+    <script src="antixss.js" type="text/javascript"></script>
+
+    <script>
+        $( document ).ready(function() {
+            $.i18n().load( {
+                en: {
+                    "welcome": "Welcome.",
+                    "name": "name",
+                    "what_is_your_name": "What is your name?",
+                    "hello": "Hello $1",
+                    "added_to_database": "Hello $1, I've added you to the database!",
+                    "database_contents": "Database contents: "
+                }
+            } );
+            $('body').i18n();
+            $('#user_name').attr("placeholder", $.i18n('name') );
+        });
+        </script>
+
+</head>
+
+<body>
+    <div class="container" id="container">
+        <h2 data-i18n="Welcome"></h2> <!- Welcome ->
+        <h4>Exercise 1</h4>
+        <text>
+        You are given a positive integer N, and two single-digit integers p and q, where p != q and both are greater than 1. You must output all of the integers from 1 to N inclusive, separated by a single space.
+        However, any integer divisible by p whose decimal representation does not contain the digit p should be replaced by the text WAT and any integer divisible by q whose decimal representation does not contain the digit q should be replaced by the text SON. Integers for which both of the preceding statements are true should instead be replaced by the text WATSON. Write a front end using a framework such as Angular.js to support the entry of the three numbers and the displaying of the results and a supporting backend preferably using Node.js but you can use any backend you wish. Implement this with the mindset that this will be production level code that will be supported by you and your team mates
+        Input: A single line on standard input per testcase: N p q
+        Output: The space-separated sequence as described above (only numbers and uppercase chars), with no leading or trailing spaces.
+      </text>
+      <br>
+      <br>
+      <h4>Solution</h4>
+      <br>
+        <div id="Input" class="input-group-lg helloInput">
+            <p class="lead" data-i18n="Enter the value of N"></p>
+            <input id="N_value" type="number" class="form-control" aria-describedby="sizing-addon1" value="10" />
+            <br>
+            <p class="lead" data-i18n="Enter the value of p"></p>
+            <input id="p_value" type="number" class="form-control" aria-describedby="sizing-addon1" value="2" />
+            <br>
+            <p class="lead" data-i18n="Enter the value of q"></p>
+            <input id="q_value" type="number" class="form-control" aria-describedby="sizing-addon1" value="3" />
+            <br>
+            <input id="submit_button" type="button" value="Submit" onclick="algorithm();">
+            <br>
+            <br>
+            <p class="lead" data-i18n="Answer" ></p>
+            <p id="response" style="width: max-content;"></p>
+
+
+        </div>
+
+    </div>
+    <footer class="footer">
+        <div class="container">
+            <p data-i18n="Priyanka Karpe Exercise 1 Solution"></p>
+        </div>
+    </footer>
+
+</body>
+
+
+</html>
+
+
+<script>
+    	//Submit data when enter key is pressed
+      function algorithm() {
+
+          $('#response').html(AntiXSS.sanitizeInput(""));
+        	var N_value = $('#N_value').val();
+        	var p_value = $('#p_value').val();
+        	var q_value = $('#q_value').val();
+
+          $.ajax({
+            method: "POST",
+            url: "./api",
+            contentType: "application/json",
+            data: JSON.stringify({N_value: N_value,p_value:p_value,q_value:q_value })
+          })
+          .done(function(data) {
+              if(data){
+                  $('#response').html(AntiXSS.sanitizeInput(data));
+              }
+              else {
+                  $('#response').html(AntiXSS.sanitizeInput(data));
+              }
+              // getNames();
+          });
+
+
+      }
+        // $('#user_name').keydown(function(e) {
+        // 	var N_value = $('#N_value').val();
+        // 	var p_value = $('#p_value').val();
+        // 	var q_value = $('#q_value').val();
+        //
+        //     if (e.which == 13 && name.length > 0) { //catch Enter key
+        //     	//POST request to API to create a new visitor entry in the database
+        //         $.ajax({
+				//   method: "POST",
+				//   url: "./api/visitors",
+				//   contentType: "application/json",
+				//   data: JSON.stringify({name: name })
+				// })
+        //         .done(function(data) {
+        //             if(data && data.name){
+        //                 if(data._id)
+        //                     $('#response').html($.i18n('added_to_database', AntiXSS.sanitizeInput(data.name)));
+        //                 else
+        //                     $('#response').html($.i18n('hello', AntiXSS.sanitizeInput(data.name)));
+        //             }
+        //             else {
+        //                 $('#response').html(AntiXSS.sanitizeInput(data));
+        //             }
+        //             $('#nameInput').hide();
+        //             getNames();
+        //         });
+        //     }
+        // });
+
+        //Retrieve all the visitors from the database
+        // function getNames(){
+        //   $.get("./api/visitors")
+        //       .done(function(data) {
+        //           if(data.length > 0) {
+        //             data.forEach(function(element, index) {
+        //               data[index] = AntiXSS.sanitizeInput(element)
+        //             });
+        //             $('#databaseNames').html($.i18n('database_contents') + JSON.stringify(data));
+        //           }
+        //       });
+        //   }
+
+          //Call getNames on page load.
+
+
+    </script>
